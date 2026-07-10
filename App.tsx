@@ -350,13 +350,28 @@ export default function App() {
       );
 
       const call = resp.functionCalls?.[0];
+      console.log("[analysis] raw response:", resp);
 
-      if (call) {
-        ({
+      if (call && call.args) {
+        const handlers: Record<string, (a: any) => void> = {
           set_timecodes: setTimecodes,
           set_timecodes_with_objects: setTimecodes,
-          set_timecodes_with_numeric_values: ({timecodes}) => setTimecodes({timecodes}),
-        })[call.name](call.args);
+          set_timecodes_with_numeric_values: ({timecodes}: any) => setTimecodes({timecodes}),
+        };
+        const handler = handlers[call.name];
+        if (handler) {
+          handler(call.args);
+        } else if (call.args.timecodes) {
+          // Model called an unexpected function name but still gave us timecodes
+          setTimecodes(call.args);
+        } else {
+          logAnomaly("ERROR", `Model returned unrecognized function '${call.name}'.`);
+        }
+      } else if (resp.text && resp.text.trim()) {
+        // No structured call — surface the raw text so the run is never silently empty
+        logAnomaly("INFO", resp.text.trim());
+      } else {
+        logAnomaly("ERROR", "Analysis returned no usable results. Try re-running the mode.");
       }
     } catch (err: any) {
       console.error("Error generating content:", err);

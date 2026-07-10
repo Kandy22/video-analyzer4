@@ -26,7 +26,7 @@ export default {
     To deliver these structured results, call 'set_timecodes' with a flat, chronologically ordered list of objects.
     Each object must have a 'time' (formatted as MM:SS) and a 'text'.
     For transcript segments, prefix the text with '[Transcript] Speaker: "..."'.
-    For key moments, prefix the text with '[Key Moment] ...'.
+    For key moments, quote the EXACT verbatim words spoken (word-for-word, no paraphrasing) and prefix with '[Key Moment] "<exact quote>"'.
     For vocal behavioral anomalies (like hesitations, speech velocity spikes, sentence-deferral hedging patterns, or interruptions), prefix the text with '[Vocal Anomaly] ...' (e.g. '[Vocal Anomaly] Vocal Hesitation interval: 1.8s silence', '[Vocal Anomaly] Speech Rate Spike: 190 WPM', '[Vocal Anomaly] Sentence-deferral phrasing detected: "maybe we could..."').
     This combined analysis allows matching up transcript lines directly with key moments and deeper emotional face/vocal review.`,
     isList: true,
@@ -41,8 +41,9 @@ export default {
 
   'Key Moments': {
     emoji: '🔑',
-    prompt: `Generate key summary moments for this video (e.g. main topics discussed, transitions, specific highlights). 
-    Call set_timecodes with the timecode of each moment, and prefix each text segment with '[Key Moment] ...'.`,
+    prompt: `Identify the key moments in this video (pivotal statements, rulings, turning points, notable exchanges).
+    For EACH key moment, quote the EXACT verbatim words spoken at that point — a direct, word-for-word transcription of the audio. Do NOT summarize, paraphrase, or describe what happened.
+    Call set_timecodes with the timecode of each key moment, and format each text segment as: '[Key Moment] "<exact verbatim quote>"'.`,
     isList: true,
   },
 

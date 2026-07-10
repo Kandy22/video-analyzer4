@@ -13,10 +13,10 @@ dotenv.config({ path: ".env.local", override: true });
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
-  app.use(express.json({ limit: "100mb" }));
-  app.use(express.urlencoded({ limit: "100mb", extended: true }));
+  app.use(express.json({ limit: "500mb" }));
+  app.use(express.urlencoded({ limit: "500mb", extended: true }));
 
   // Initialize Multer for temporary file uploads in the system temp directory
   const upload = multer({ dest: os.tmpdir() });
@@ -357,7 +357,7 @@ async function startServer() {
   // Serve Vite app in dev, or static files in production
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: true, hmr: false },
       appType: "spa",
     });
     app.use(vite.middlewares);
