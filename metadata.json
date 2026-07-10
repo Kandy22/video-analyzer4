@@ -1,0 +1,7 @@
+{
+  "name": "Remix: Video Analyzer2",
+  "description": "Chat with any video to instantly summarize, find objects, or extract text with Gemini.",
+  "requestFramePermissions": [],
+  "prompt": "",
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
